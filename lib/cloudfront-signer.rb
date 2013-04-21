@@ -102,6 +102,11 @@ module AWS
         end
       end
 
+      def self.reset!
+        @key_path = nil
+        @key = nil
+        @key_string = nil
+        @key_pair_id = nil
       end
 
       # Public: Provides a configuration check method which tests to see 
