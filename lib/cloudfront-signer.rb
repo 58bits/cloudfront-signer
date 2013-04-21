@@ -10,7 +10,7 @@ module AWS
     class Signer
       # Public non-inheritable class accessors
       class << self
-        
+
         # Public: Provides a configuration option to set the key_pair_id if it has not 
         # been inferred from the key_path
         #
@@ -35,7 +35,17 @@ module AWS
         def key_path=(path)
           raise ArgumentError.new("The signing key could not be found at #{path}") unless File.exists?(path)
           @key_path = path
-          @key = OpenSSL::PKey::RSA.new(File.readlines(path).join(""))
+          self.key_string = File.readlines(path).join("")
+        end
+
+        def key_string=(key_string)
+          raise ArgumentError, "key_string must be a string" if key_string.nil?
+          @key_string = key_string
+          @key = OpenSSL::PKey::RSA.new(key_string)
+        end
+
+        def key_string
+          @key_string
         end
 
         # Public: Provides an accessor to the key_path 
@@ -94,30 +104,36 @@ module AWS
 
         yield self if block_given?
 
-        raise ArgumentError.new("You must supply the path to a PEM format RSA key pair.") unless self.key_path
+        raise ArgumentError.new("You must supply the PEM format RSA key pair as a string (or path to the file).") unless private_key
 
         unless @key_pair_id
-          @key_pair_id = extract_key_pair_id(self.key_path)
-          raise ArgumentError.new("The Cloudfront signing key id could not be inferred from #{self.key_path}. Please supply the key pair id as a configuration argument.") unless @key_pair_id 
+          @key_pair_id = extract_key_pair_id(self.key_path) if self.key_path
+          raise ArgumentError.new("The Cloudfront signing key id could not be inferred from #{self.key_path}. Please supply the key pair id as a configuration argument.") unless @key_pair_id
         end
-
       end
 
-      # Public: Provides a configuration check method which tests to see 
+      def self.reset!
+        @key_path = nil
+        @key = nil
+        @key_string = nil
+        @key_pair_id = nil
+      end
+
+      # Public: Provides a configuration check method which tests to see
       # that the key_path, key_pair_id and private key values have all been set.
       #
       # Returns a Boolean value indicating that settings are present.
       def self.is_configured?
-        (self.key_path.nil? || self.key_pair_id.nil? || private_key.nil?) ? false : true
+        (key_pair_id.nil? || private_key.nil?) ? false : true
       end
 
-      # Public: Sign a url - encoding any spaces in the url before signing. CloudFront 
+      # Public: Sign a url - encoding any spaces in the url before signing. CloudFront
       # stipulates that signed URLs must not contain spaces (as opposed to stream
-      # paths/filenames which CAN contain spaces). 
+      # paths/filenames which CAN contain spaces).
       #
-      # Returns a String 
-      def self.sign_url(subject, policy_options = {}) 
-        self.sign(subject, {:remove_spaces => true}, policy_options) 
+      # Returns a String
+      def self.sign_url(subject, policy_options = {})
+        self.sign(subject, {:remove_spaces => true}, policy_options)
       end
 
 
