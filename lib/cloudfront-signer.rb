@@ -10,7 +10,7 @@ module AWS
     class Signer
       # Public non-inheritable class accessors
       class << self
-        
+
         # Public: Provides a configuration option to set the key_pair_id if it has not 
         # been inferred from the key_path
         #
@@ -100,6 +100,7 @@ module AWS
           @key_pair_id = extract_key_pair_id(self.key_path)
           raise ArgumentError.new("The Cloudfront signing key id could not be inferred from #{self.key_path}. Please supply the key pair id as a configuration argument.") unless @key_pair_id 
         end
+      end
 
       end
 
@@ -112,12 +113,17 @@ module AWS
       end
 
       # Public: Sign a url - encoding any spaces in the url before signing. CloudFront 
+      # Public: Sign a url - encoding any spaces in the url before signing. CloudFront
       # stipulates that signed URLs must not contain spaces (as opposed to stream
       # paths/filenames which CAN contain spaces). 
+      # paths/filenames which CAN contain spaces).
       #
       # Returns a String 
       def self.sign_url(subject, policy_options = {}) 
         self.sign(subject, {:remove_spaces => true}, policy_options) 
+      # Returns a String
+      def self.sign_url(subject, policy_options = {})
+        self.sign(subject, {:remove_spaces => true}, policy_options)
       end
 
 
