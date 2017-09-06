@@ -91,7 +91,7 @@ describe AWS::CF::Signer do
 
       it "should optionally expire in ten minutes" do
         url = "http://somedomain.com/sign me"
-        result = AWS::CF::Signer.sign_url(url, :expires => Time.now + 600)
+        result = AWS::CF::Signer.sign_url(url, expires: Time.now + 600)
         get_query_value(result, 'Expires').to_i.should eql((Time.now + 600 ).to_i)
       end
 

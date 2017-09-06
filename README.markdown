@@ -1,6 +1,6 @@
 # cloudfront-signer
 ## New Repository
-As discussed in [#5](https://github.com/58bits/cloudfront-signer/pull/5) the new home for this gem is [leonelgalan/cloudfront-signer](https://github.com/leonelgalan/cloudfront-signer). The new repository, won't be a fork, allowing users to post issues. 
+As discussed in [#5](https://github.com/58bits/cloudfront-signer/pull/5) the new home for this gem is [leonelgalan/cloudfront-signer](https://github.com/leonelgalan/cloudfront-signer). The new repository, won't be a fork, allowing users to post issues.
 
 ---
 
@@ -47,7 +47,7 @@ Call the class `sign_url` or `sign_path` method with optional policy settings.
 
 or
 
-    AWS::CF::Signer.sign_url 'http://mydomain/path/to/my/content', :expires => Time.now + 600
+    AWS::CF::Signer.sign_url 'http://mydomain/path/to/my/content', expires: Time.now + 600
 
 Streaming paths can be signed with the `sign_path` method.
 
@@ -55,7 +55,7 @@ Streaming paths can be signed with the `sign_path` method.
 
 or
 
-    AWS::CF::Signer.sign_path 'path/to/my/content', :expires => Time.now + 600
+    AWS::CF::Signer.sign_path 'path/to/my/content', expires: Time.now + 600
 
 
 Both `sign_url` and `sign_path` have _safe_ versions that HTML encode the result allowing signed paths or urls to be placed in HTML markup. The 'non'-safe versions can be used for placing signed urls or paths in JavaScript blocks or Flash params.
@@ -66,23 +66,23 @@ Both `sign_url` and `sign_path` have _safe_ versions that HTML encode the result
 See Example Custom Policy 1 at above AWS doc link
 
     url = AWS::CF::Signer.sign_url('http://d604721fxaaqy9.cloudfront.net/training/orientation.avi',
-            :expires   => 'Sat, 14 Nov 2009 22:20:00 GMT',
-            :resource => 'http://d604721fxaaqy9.cloudfront.net/training/*',
-            :ip_range => '145.168.143.0/24'
+            expires: 'Sat, 14 Nov 2009 22:20:00 GMT',
+            resource: 'http://d604721fxaaqy9.cloudfront.net/training/*',
+            ip_range: '145.168.143.0/24'
     )
 
 See Example Custom Policy 2 at above AWS doc link
 
     url = AWS::CF::Signer.sign_url('http://d84l721fxaaqy9.cloudfront.net/downloads/pictures.tgz',
-            :starting => 'Thu, 30 Apr 2009 06:43:10 GMT',
-            :expires   => 'Fri, 16 Oct 2009 06:31:56 GMT',
-            :resource => 'http://*',
-            :ip_range => '216.98.35.1/32'
+            starting: 'Thu, 30 Apr 2009 06:43:10 GMT',
+            expires: 'Fri, 16 Oct 2009 06:31:56 GMT',
+            resource: 'http://*',
+            ip_range: '216.98.35.1/32'
     )
 
 You can also pass in a path to a policy file. This will supersede any other policy options
 
-    url = AWS::CF::Signer.sign_url('http://d84l721fxaaqy9.cloudfront.net/downloads/pictures.tgz', :policy_file => '/path/to/policy/file.txt')
+    url = AWS::CF::Signer.sign_url('http://d84l721fxaaqy9.cloudfront.net/downloads/pictures.tgz', policy_file: '/path/to/policy/file.txt')
 
 
 ## Patches/Pull Requests

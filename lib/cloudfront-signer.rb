@@ -130,7 +130,7 @@ module AWS
       #
       # Returns a String
       def self.sign_url(subject, policy_options = {})
-        self.sign(subject, {:remove_spaces => true}, policy_options)
+        self.sign(subject, {remove_spaces: true}, policy_options)
       end
 
 
@@ -139,7 +139,7 @@ module AWS
       #
       # Returns a String
       def self.sign_url_safe(subject, policy_options = {})
-        self.sign(subject, {:remove_spaces => true, :html_escape => true}, policy_options)
+        self.sign(subject, {remove_spaces: true, html_escape: true}, policy_options)
       end
 
       # Public: Sign a stream path part or filename (spaces are allowed in stream paths
@@ -147,14 +147,14 @@ module AWS
       #
       # Returns a String
       def self.sign_path(subject, policy_options ={})
-        self.sign(subject, {:remove_spaces => false}, policy_options)
+        self.sign(subject, {remove_spaces: false}, policy_options)
       end
 
       # Public: Sign a stream path or filename and HTML encode the result.
       #
       # Returns a String
       def self.sign_path_safe(subject, policy_options ={})
-        self.sign(subject, {:remove_spaces => false, :html_escape => true}, policy_options)
+        self.sign(subject, {remove_spaces: false, html_escape: true}, policy_options)
       end
 
       # Public: Builds a signed url or stream resource name with optional configuration and
